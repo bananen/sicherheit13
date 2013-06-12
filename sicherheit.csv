@@ -204,3 +204,29 @@ Renegotation (Neuaushandlung des Schluessels) moeglich
 
 Theorem (Hastad und Naeslung):
 Sei N, e, d wie bei RSA, M<sup>*</sup> und i in {1, ..., log<sub>2</sub>(N)} beliebig. Sei O ein Orakel, das bei Eingabe C das i-te Bit von M = C<sup>d</sup> mod N ausgibt. Dann existiert ein (von N, e, d unabhaengiger) Polynomial-Algorithmus, der bei Eingabe N, e, i und C<sup>*</sup> := (M<sup>*</sup>)<sup>e</sup> mod N, und mit O-Zugriff M<sup>*</sup> berechnet.",Sicherheit,0
+IPsec (Internet Protocol Security),"Aehnlich wie TLS, aber ohne Handshake und auf niedriger Ebene
+Schlecht untersucht, aber Angriffe existieren",Sicherheit,0
+PK-Identifikationsprotokoll,"(Gen, P, V)
+Gen(1<sup>k</sup>) gibt Schluesselpaar (pk, sk) aus
+1. V wird mit Eingabe pk gestartet, Ausgabe sei out<sub>V</sub>
+2. P wird mit Eingaben sk und out<sub>V</sub> gestartet, Ausgabe out<sub>P</sub>
+3. V wird mit Eingabe out<sub>P</sub> gestartet, Ausgabe out<sub>V</sub>
+Ist out<sub>V</sub> in {0, 1}, dann beende die Interaktion
+Andernfall zurueck zu Schritt 2 (sk-Eingabe nicht mehr noetig)
+
+&lt;P(sk), V(pk)&gt; ist Transkript der Interaktion
+V gibt schließlich 1 aus fuer (pk, sk) &lt;- Gen(1<sup>k</sup>)
+
+
+PK-ID-Protokoll sicher :&lt;=&gt; kein PPT-Angreifer A gewinnt folgendes Spiel mehr als vernachlaessigbar oft:
+Phase 1: A darf mit beliebig vielen P-Instanzen (mit sk<sub>i</sub>) in der Rolle des Verifiers V (mit Eingabe pk<sub>i</sub>) interagieren. Die verwendeten (pk<sub>i</sub>, sk<sub>i</sub>) &lt;- Gen(1<sup>k</sup>) sind vom Spiel gewaehlt
+Phase 2: A sucht sich ein schon vom Spiel gewaehltes pk<sub>i*</sub> aus und interagiert mit einer V-Instanz (mit Eingabe pk<sub>i*</sub>)
+Entscheidung: A gewinnt, wenn V schließlich 1 ausgibt
+
+Intuition: Kein A schafft es, andere zu impersonieren
+
+P &lt;--- R --- V
+P --- sigma := Sig(sk<sub>A</sub>, R) ---&gt; V
+
+Sicherheit:
+Ist das verwendete Signaturverfahren EUF-CMA-sicher, so ist das PK-ID-Protokoll sicher.",Sicherheit,0
