@@ -1,19 +1,30 @@
 Frontside,Flipside,Category,Level
-Stromchiffre,Zeichen des Klartexts werden einzeln mit den Zeichen eines Schluesselstroms verknuepft,Sicherheit,0
-Blockchiffre,"Kann nur einzelnen Block auf Chiffrat abbilden, fuer laengere Klartexte werden Betriebsmodi gebraucht (ECB, CBC, CFB, OFB)",Sicherheit,0
+Rainbow Tables,"Grundidee: betrachte Ketten von Hash-Passwort-Paaren mit Hilfe von einer Funktion:
+
+(H(pw<sub>1,1</sub>),pw<sub>1,1</sub>) --f--&gt; (H(pw<sub>1,2</sub>),pw<sub>1,2</sub>) ...
+(H(pw<sub>2,1</sub>),pw<sub>2,1</sub>) --f--&gt; (H(pw<sub>2,2</sub>),pw<sub>2,2</sub>) ...
+
+Konsequenz: Nur noch die aeußeren Tupel muessen gespeichert werden, spart Faktor m/2 an Speicherplatz.
+
+
+Bei Rainbow Tables fuer jede Spalte eine Funktion, damit Restzeilen nicht gleich sind, sobald pw<sub>i,u</sub> = pw<sub>j,v</sub>.",,0
+Gegenmaßnahmen zu Woerterbuchangriffen,"Salting:
+U<sub>pw</sub> ---pw---&gt; S<sub>(salt,H(salt,pw))
+
+</sub>Key Strengthening:
+H'(pw) = H(H(...H(pw)...))",,0
+Interaktive Nutzerauthentifikation,"U nutzt sichere Hardware (Chipkarte/Lesegeraet):
+
+U ---pw/PIN---&gt; HW<sub>K,pw</sub> &lt;---R--- S<sub>K</sub>
+U                     HW<sub>K,pw</sub> ---sigma:=Sig(K,R)---&gt; S<sub>K
+
+</sub>Manchmal ohne pw/PIN.",,0
 ECB,"Electronic Codebook Mode:
 
 C<sub>i</sub> := E(K, M<sub>i</sub> )
 
 parallelisierbar
 Fehler wirkt sich nur auf entsprechenden Block aus",Sicherheit,0
-CBC,"Cipher Block Chaining Mode
-
-C<sub>i</sub> := E(K, M<sub>i</sub> xor C<sub>i-1</sub>)
-M<sub>i</sub> := D(K, C<sub>i</sub>) xor C<sub>i-1
-
-</sub>parallelisierbar
-Fehler randomisiert entsprechenden Klartextblock, im folgenden Block werden die gleichen Bits geaendert",Sicherheit,0
 CFB,"Cipher Feedback Mode
 
 C<sub>i</sub> := E(K, C<sub>i-1</sub>) xor M<sub>i
@@ -28,20 +39,8 @@ nicht parallelisierbar
 Bitfehler wirken sich nur auf entsprechende Bits im Klartext aus, keine Fortpflanzung
 
 ist letztlich Stromchiffre",Sicherheit,0
-DES-Rundenfunktion F,,Sicherheit,0
-DES-Feistelstruktur,,Sicherheit,0
 Meet-in-the-Middle-Angriff auf 2DES,"Gegeben: Nachricht-Chiffrat-Paar, gesucht: K = (K<sub>1</sub>, K<sub>2</sub>)
 Verschluessel M mit allen moeglichen Schluesseln, sortiere, entschluessel C mit allen moeglichen Schluesseln und vergleiche mit sortierter Liste",Sicherheit,0
-Lineare Kryptoanalyse,"Finde F<sub>2</sub>-lineare Abhaengigkeiten zwischen den Bits
-
-Idealer Fall: K aus Paaren herleitbar
-
-Bei Feistelverfahren indirekter Angriff moeglich:
-1. Finde lin. Abh. zwischen F-Ein- und -Ausgabe
-2. Erweitere Abhaengigkeiten auf die ersten n-1 Feistel-Runden
-3. Vollstaendige Suche ueber letzten Rundenschluessel K<sup>(n)</sup>...
-4. ...ueberpruefe K<sup>(n)</sup>-Kandidaten mittels linearer Abhaengigkeit
-5. Wenn K<sup>(n)</sup> gefunden, suche nach K<sup>(n-1)</sup>, danach K<sup>(n-2)</sup>",Sicherheit,0
 Semantische Sicherheit von symmetrischen Verschluesselungsverfahren,"Ein symmetrisches Verschluesselungsverfahren ist semantisch sicher, wenn es fuer jede M-Verteilung von Nachrichten gleicher Laenge, jede Funktion f und jeden effizienten Algorithmus A einen effizienten Algorithmus B gibt, sodass
 
 Pr[A<sup>Enc(K,.)</sup>(Enc(K,M)) = f(M)] - Pr[B(e) = f(M)]
@@ -58,21 +57,6 @@ IND-CPA (indistinguishability under chosen-plaintext attacks),"Kein effizienter 
 forall A: (Pr[A gewinnt] - 0.5) klein :&lt;=&gt; Schema IND-CPA-sicher
 
 Ein symmetrisches Verschluesselungsverfahren ist genau dann semantisch sicher, wenn es IND-CPA sicher ist.",Sicherheit,0
-Kollisionsresistenz von Hashfunktionen,"Eine Hashfunktion H ist kollisionsresistent, wenn jeder effiziente Algorithmus nur mit kleiner Wahrscheinlichkeit eine Kollision findet.
-
-Formal:
-Eine ueber k parametrisierte Funktion H ist kollisionsresistent, wenn jeder PPT-Algorithmus nur mit hoechstens vernachlaessigbarer Wahrscheinlichkeit eine Kollision findet.
-
-
-Genauer: fuer jeden PPT-Algorithmus A ist
-
-Adv<sup>cr</sup><sub>H,A</sub>(k) := Pr[(X, X') &lt;- A(1<sup>k</sup>) : X != X' und H<sub>k</sub>(X) = H<sub>k</sub>(X')]
-
-vernachlaessigbar.
-
-Kollisionsresistenz =&gt; Einwegeigenschaft",Sicherheit,0
-kleine Wahrscheinlichkeit,"Vernachlaessigbar (in k)
-f: N -&gt; R vernachlaessigbar :&lt;=&gt; |f| verschwindet asymptotisch schneller als Kehrwert jedes vorgegebenen Polynoms",Sicherheit,0
 Einwegfunktion,"Eine ueber k parametrisierte Funktion H ist eine Einwegfunktion bzgl. der Urbildverteilung, wenn jeder PPT-Algorithmus nur mit hoechstens vernachlaessigbarer Wahrscheinlichkeit ein Urbild eines gegebenen, aus der Urbildverteilung gezogenen Bildes findet.
 Genauer: fuer jeden PPT-Algorithmus A ist
 
@@ -82,36 +66,12 @@ vernachlaessigbar, wobei X &lt;- Urbildmenge gewaehlt wurde",Sicherheit,0
 Target Collision Resistance (weniger wichtig) bzw. Second Preimage Resistance oder Universal One-Way,"Gegeben X, finde X' mit H(X) = H(X')
 
 Kollisionsresistenz =&gt; Target Collision Resistance =&gt; Einwegeigenschaft",Sicherheit,0
-Merkle-Damgard-Konstruktion,"Hashfunktion H<sub>MD</sub> wird aus einfachen Bausteinen gebaut
-Baustein: Kompressionsfunktion F: {0, 1}<sup>2k</sup> -&gt; {0, 1}<sup>k
-
-</sup>
-Ist F kollisionsresistent, so ist auch H<sub>MD</sub> kollisionsresistent",Sicherheit,0
 Birthday Attack,"Birthday Bound Theorem:
 Sei n &lt; 2<sup>k/2</sup> und Y<sub>1</sub>,...,Y<sub>n</sub> in {0, 1}<sup>k</sup> unabhaengig gleichverteilt. Dann gibt es i != j mit Y<sub>i</sub> = Y<sub>j</sub> mit Wkt. p &gt; (1/11) * (n<sup>2</sup>/2<sup>k</sup>)
 
 Konsequenz: fuer n = 2<sup>k/2</sup> zufaellige (verschiedene) X<sub>i</sub> Kollisionen unter den Y<sub>i</sub> mit Wahrscheinlichkeit p &gt; 1/11
 
 Also Ausgabelaenge &gt;= k Bits fuer k/2 Bits Sicherheit",Sicherheit,0
-RSA,"pk = (N,e); sk = (N,d)
-
-N = PQ fuer (hinreichend große) Primzahlen P != Q
-Rechnung in Z/NZ
-e und d sind zueinenander inverse Exponenten:
-e * d = 1 mod (P-1)(Q-1)
-
-Enc(pk, M) = M<sup>e</sup> mod N; Dec(sk, C) = C<sup>d</sup> mod N
-
-RSA ist homomorph, daher verfaelschende Angriffe moeglich",Sicherheit,0
-ElGamal,"zyklische Gruppe G = &lt;g&gt;
-
-pk = (G, g, g<sup>x</sup>), sk = (G, g, x) (mit x zufaellig)
-
-Enc(pk, M) = (g<sup>y</sup>, g<sup>xy</sup> * M) (mit y zufaellig)
-Dec(sk, (Y, Z)) = Z/Y<sup>x</sup> (= (g<sup>xy</sup> * M)/(g<sup>y</sup>)<sup>x</sup> = M)
-
-Verschluesselung probabilistisch
-Wie RSA homomorph, aber nicht-homomorphe Varianten existieren",Sicherheit,0
 EUF-CMA,"Schema EUF-CMA-sicher &lt;=&gt; kein PPT-Angreifer A gewinnt folgendes Spiel nicht-vernachlaessigbar oft:
 
 1. A erhaelt Zugriff auf ein Sig(K, .)-Orakel
@@ -122,22 +82,6 @@ Pseudorandom Function,"Sei PRF: {0, 1}<sup>k</sup> x {0, 1}<sup>k</sup> -&gt; {0
 Adv<sup>prf</sup><sub>PRF,A</sub>(k) := Pr[A<sup>PRF(K,.)</sup>(1<sup>k</sup>) = 1] - Pr[A<sup>R(.)</sup>(1<sup>k</sup>) = 1]
 
 vernachlaessigbar ist, wobei R: {0, 1}<sup>k</sup> -&gt; {0, 1}<sup>k</sup> eine echt zufaellige Funktion ist.",Sicherheit,0
-Digitale Signaturschemata,"(pk, sk) &lt;- Gen(1<sup>k</sup>)
-
-Signieren: sigma &lt;- Sig(sk, M)
-Verifizieren: Ver(pk, M, sigma) in {0, 1}
-
-Korrektheit wie bei MACs:
-Ver(pk, M, sigma) = 1 fuer alle (pk, sk) &lt;- Gen(1<sup>k</sup>), alle M und alle sigma = Sig(sk, M)
-
-Schema EUF-CMA-sicher &lt;=&gt; kein PPT-Angreifer A gewinnt folgendes Spiel nicht-vernachlaessigbar oft:
-1. A erhaelt Zugriff auf ein Sig(sk, .)-Orakel
-2. A gibt Ausgabe (M<sup>*</sup>, sigma<sup>*</sup>)
-3. A gewinnt, wenn Ver(pk, M<sup>*</sup>, sigma<sup>*</sup>) = 1 und M<sup>*</sup> 'frisch'",Sicherheit,0
-RSA-PSS (Probabilistic Signature Scheme),"Sig(sk, M) = (pad(M))<sup>d</sup> mod N
-Ver(pk, M, sigma) = 1 :&lt;=&gt; sigma<sup>e</sup> mod N gueltiges pad(M)
-
-EUF-CMA-sicher, sofern RSA-Funktion schwer zu invertieren",Sicherheit,0
 ElGamal-Signaturen,"Ueber zyklischer Gruppe G = &lt;g&gt;
 
 pk = (G, g, g<sup>x</sup>), sk = (G, g, x)
@@ -151,13 +95,6 @@ Ver(pk, M, sigma) = 1 :&lt;=&gt; (g<sup>x</sup>)<sup>a</sup>a<sup>b</sup> = g<su
 a = g<sup>e</sup> wird sowohl als G-Element als auch als Exponent interpretiert
 
 Nicht EUF-CMA-sicher weil Signaturen fuer unsinnige Nachrichten erstellt werden koennen",Sicherheit,0
-Hash-Then-Sign-Paradigma,"Sei (Gen, Sig, Ver) EUF-CMA-sicher und H eine kollisionsresistente Hashfunktion. Dann ist das durch 
-
-Gen'(1<sup>k</sup>) = Gen(1<sup>k</sup>)
-Sig'(sk, M) = Sig(sk, H(M))
-Ver'(pk, M, sigma) = Ver(pk, H(M), sigma)
-
-erklaerte Signatureverfahren EUF-CMA-sicher",Sicherheit,0
 Digital Signatures Algorithm (DSA),"sigma = (a = g<sup>e</sup>, b) mit
 a*x + e*b = H(M) mod |G|
 
@@ -184,11 +121,6 @@ Zusaetzliche Signatur ermoeglicht Authentifikation:
 Alice --- C:=Enc(pk<sub>PKE,B</sub>, K), sigma=Sigma(sk<sub>Sig,A</sub>, C)) ---&gt; Bob
 
 Immer noch Replay-Angriffe moeglich",Sicherheit,0
-Diffie-Hellman-Schluesselaustauch,"1. Alice --- g<sup>x</sup> ---&gt; Bob
-2. Bob --- g<sup>y</sup> ---&gt; Alice
-Gemeinsamer Schluessel: K = g<sup>xy</sup>
-
-Passiv sicher, Authentifikation gewaehrleistet, aber Replay-Angriffe moeglich",Sicherheit,0
 Tansport Layer Security (TLS),"Protokoll fuer den Aufbau und Betrieb sicherer Kanaele:
 Zuerst authentifizierter asymmetrischer Schluesselaustausch,
 danach symmetrische Verschluesselung der Nutzdaten.
@@ -197,8 +129,70 @@ Renegotation (Neuaushandlung des Schluessels) moeglich.
 Nach heutiger Kenntnis mit Patches sicher.
 
 Es existieren viele Angriffe auf unterschiedliche Varianten.",Sicherheit,0
-IPsec (Internet Protocol Security),"Aehnlich wie TLS, aber ohne Handshake und auf niedriger Ebene.
-Schlecht untersucht, aber Angriffe existieren.",Sicherheit,0
+Zero-Knowledge,"PK-Identifikation, bei der
+- V nichts ueber sk lernt
+- P beweist, dass er sk kennt
+
+Formalisiert: &lt;P(sk), A(pk)&gt;-Transkript kann von Simulator S(pk) simuliert werden",Sicherheit,0
+RSA als Signaturschema,"Sig(sk, M) = M<sup>d</sup> mod N
+Ver(pk, M, sigma) = 1 :&lt;=&gt; M = sigma<sup>e</sup> mod N
+
+Problem: unsinnige Nachrichten koennen signiert werden:
+1. Waehle Signatur sigma beliebig
+2. Setze M := sigma<sup>e</sup> mod N
+
+Problem: Homomorphie von RSA: Neue Signaturen lassen sich aus bekannten berechnen.
+
+Bricht EUF-CMA-Sicherheit.
+
+Loesung: RSA-PSS.",Sicherheit,0
+DES,"Data Encryption Standard
+
+Erinnerung: E: {0, 1}<sup>k</sup> x {0, 1}<sup>l</sup> → {0, 1}<sup>l</sup> zentral
+
+DES: Beispiel fuer E mit k = 56 und l = 64
+
+Verwendet Feistel-Netzwerke.
+Rundenfunktion F ohne Falltuer -&gt; Falltuerfunktion E.
+Strukturell ungebrochen.",Sicherheit,0
+Theorem (Hastad und Naeslund),"Sei N, e, d wie bei RSA, M* und i in {1, ..., log2(N)} beliebig. Sei O ein Orakel, das bei Eingabe C das i-te Bit von M = Cd mod N ausgibt. Dann existiert ein (von N, e, d unabhaengiger) Polynomial-Algorithmus, der bei Eingabe N, e, i und C* := (M*)e mod N, und mit O-Zugriff M* berechnet.",Sicherheit,0
+RSA,"pk = (N,e); sk = (N,d)
+
+N = PQ fuer (hinreichend große) Primzahlen P != Q
+Rechnung in Z/NZ
+e und d sind zueinenander inverse Exponenten:
+e * d = 1 mod (P-1)(Q-1)
+
+Enc(pk, M) = M<sup>e</sup> mod N; Dec(sk, C) = C<sup>d</sup> mod N
+
+RSA ist homomorph, daher verfaelschende Angriffe moeglich",Sicherheit,0
+Merkle-Damgard-Konstruktion,"Hashfunktion H<sub>MD</sub> wird aus einfachen Bausteinen gebaut
+Baustein: Kompressionsfunktion F: {0, 1}<sup>2k</sup> -&gt; {0, 1}<sup>k
+
+</sup>
+Ist F kollisionsresistent, so ist auch H<sub>MD</sub> kollisionsresistent",Sicherheit,0
+MACs aus PRFs und Hashfunktionen,"Sei PRF: {0, 1}<sup>k</sup> x {0, 1}<sup>k</sup> -&gt; {0, 1}<sup>k</sup> eine PRF und H: {0, 1}* -&gt; {0, 1}<sup>k</sup> eine kollisionsresistente Hashfunktion. Dann ist der durch Sig(K, M) = PRF(K, H(M)) gegebene MAC EUF-CMA-sicher.
+
+Unsicher: Sig(K, M) = H(K, M)
+Besser: Sig(K, M) = H(K, H(M))
+HMAC, noch besser: Sig(K, M) = H(K xor opad, H(K xor ipad, M))",Sicherheit,0
+DES-Rundenfunktion F,,Sicherheit,0
+Diffie-Hellman-Schluesselaustauch,"1. Alice --- g<sup>x</sup> ---&gt; Bob
+2. Bob --- g<sup>y</sup> ---&gt; Alice
+Gemeinsamer Schluessel: K = g<sup>xy</sup>
+
+Passiv sicher, Authentifikation gewaehrleistet, aber Replay-Angriffe moeglich.",Sicherheit,0
+DES-Feistelstruktur,,Sicherheit,0
+CBC,"Cipher Block Chaining Mode
+
+C<sub>i</sub> := E(K, M<sub>i</sub> xor C<sub>i-1</sub>)
+M<sub>i</sub> := D(K, C<sub>i</sub>) xor C<sub>i-1
+
+</sub>parallelisierbar
+Fehler randomisiert entsprechenden Klartextblock, im folgenden Block werden die gleichen Bits geaendert",Sicherheit,0
+ZK-Protokoll beasierend auf Graph-Dreifaerbbarkeit,"1. P committed sich auf Dreifaerbung mit permutierten Farben
+2. V waehlt eine zufaellige Kante des Graphen aus
+3. P oeffnet Commitments fuer Kante (V akzeptiert, wenn geoeffnete Knotenfarben unterschiedlich)",Sicherheit,0
 "PK-Identifikationsprotokoll (Gen, P, V)","Gen(1<sup>k</sup>) gibt Schluesselpaar (pk, sk) aus.
 1. V wird mit Eingabe pk gestartet, Ausgabe sei out<sub>V</sub>
 2. P wird mit Eingaben sk und out<sub>V</sub> gestartet, Ausgabe out<sub>P</sub>
@@ -222,17 +216,18 @@ P --- sigma := Sig(sk<sub>A</sub>, R) ---&gt; V
 
 Sicherheit:
 Ist das verwendete Signaturverfahren EUF-CMA-sicher, so ist das PK-ID-Protokoll sicher.",Sicherheit,0
-Zero-Knowledge,"PK-Identifikation, bei der
-- V nichts ueber sk lernt
-- P beweist, dass er sk kennt
+Digitale Signaturschemata,"(pk, sk) &lt;- Gen(1<sup>k</sup>)
 
-Formalisiert: &lt;P(sk), A(pk)&gt;-Transkript kann von Simulator S(pk) simuliert werden",Sicherheit,0
-ZK-Protokoll beasierend auf Graph-Dreifaerbbarkeit,"1. P committed sich auf Dreifaerbung mit permutierten Farben
-2. V waehlt eine zufaellige Kante des Graphen aus
-3. P oeffnet Commitments fuer Kante (V akzeptiert, wenn geoeffnete Knotenfarben unterschiedlich)",Sicherheit,0
-Proof of Knowledge,"Ein PK-Identifikationsprotokoll (Gen, P, V) ist ein Proof of Knowledge (POK), falls ein PPT-Algorithmus epsilon (der Extraktor) existiert, sodass epsilon<sup>P'</sup>(pk) Bei Zugriff auf einen beliebigen erfolgreichen Prover P' schon einen geheimen Schluessel sk zu pk extrahiert.
+Signieren: sigma &lt;- Sig(sk, M)
+Verifizieren: Ver(pk, M, sigma) in {0, 1}
 
-Widerspricht nihct Zero-Knowledge!",Sicherheit,0
+Korrektheit wie bei MACs:
+Ver(pk, M, sigma) = 1 fuer alle (pk, sk) &lt;- Gen(1<sup>k</sup>), alle M und alle sigma = Sig(sk, M)
+
+Schema EUF-CMA-sicher &lt;=&gt; kein PPT-Angreifer A gewinnt folgendes Spiel nicht-vernachlaessigbar oft:
+1. A erhaelt Zugriff auf ein Sig(sk, .)-Orakel
+2. A gibt Ausgabe (M<sup>*</sup>, sigma<sup>*</sup>)
+3. A gewinnt, wenn Ver(pk, M<sup>*</sup>, sigma<sup>*</sup>) = 1 und M<sup>*</sup> 'frisch'",Sicherheit,0
 Identifikationssicherheit,"Gilt, wenn pk -&gt; sk-Problem hard-on-average ist und Protokoll ZK- und POK-Eigenschaften hat",Sicherheit,0
 Differentielle Kryptoanalyse,"Betrachte Ausgabedifferenzen in Abhaengigkeit von Eingabedifferenzen.
 
@@ -240,12 +235,9 @@ Bei Feistel-Verfahren aehnlich wie bei lin. Analyse:
 1. Finde wahrscheinliche Paare von Differenzen zwischen Ein- und Ausgabe von vorletzter Runde
 2. Vollstaendige Suche ueber letzten Rundenschluessel K<sup>(n)</sup>...
 3. ...ueberpruefe K<sup>(n)</sup>-Kandidaten auf Differenzen-Konsistenz aus 1",Sicherheit,0
-Hash-Then-Sign-Paradigma,"Sei (Sig, Ver) EUF-CMA-sicher und H eine kollisionsresistente Hashfunktion. Dann ist der durch Sig'(K, M) = Sig(K, H(M)), Ver'(K, M, sigma) = Ver(K, H(M), sigma) erklaerte MAC EUF-CMA-sicher",Sicherheit,0
-MACs aus PRFs und Hashfunktionen,"Sei PRF: {0, 1}<sup>k</sup> x {0, 1}<sup>k</sup> -&gt; {0, 1}<sup>k</sup> eine PRF und H: {0, 1}* -&gt; {0, 1}<sup>k</sup> eine kollisionsresistente Hashfunktion. Dann ist der durch Sig(K, M) = PRF(K, H(M)) gegebene MAC EUF-CMA-sicher.
+Proof of Knowledge,"Ein PK-Identifikationsprotokoll (Gen, P, V) ist ein Proof of Knowledge (POK), falls ein PPT-Algorithmus epsilon (der Extraktor) existiert, sodass epsilon<sup>P'</sup>(pk) Bei Zugriff auf einen beliebigen erfolgreichen Prover P' schon einen geheimen Schluessel sk zu pk extrahiert.
 
-Unsicher: Sig(K, M) = H(K, M)
-Besser: Sig(K, M) = H(K, H(M))
-HMAC, noch besser: Sig(K, M) = H(K xor opad, H(K xor ipad, M))",Sicherheit,0
+Widerspricht nicht Zero-Knowledge!",Sicherheit,0
 Semantische Sicherheit fuer Public-Key-Verfahren,"Ein Public-Key-Verschluesselungsschema ist semantisch sicher, wenn es fuer jede M-Verteilung von Nachrichten gleicher Laenge jede Funktion f und jeden PPT-Algorithmus A einen PPT-Algorithmus B gibt, sodass
 
 Pr[A(1<sup>k</sup>, pk, Enc(pk, M)) = f(M)] - Pr[B(1<sup>k</sup>) = f(M)]
@@ -253,27 +245,56 @@ Pr[A(1<sup>k</sup>, pk, Enc(pk, M)) = f(M)] - Pr[B(1<sup>k</sup>) = f(M)]
 vernachlaessigbar ist.
 
 Aequivalent zu IND-CPA.",Sicherheit,0
-RSA als Signaturschema,"Sig(sk, M) = M<sup>d</sup> mod N
-Ver(pk, M, sigma) = 1 :&lt;=&gt; M = sigma<sup>e</sup> mod N
+ElGamal,"zyklische Gruppe G = &lt;g&gt;
 
-Problem: unsinnige Nachrichten koennen signiert werden:
-1. Waehle Signatur sigma beliebig
-2. Setze M := sigma<sup>e</sup> mod N
+pk = (G, g, g<sup>x</sup>), sk = (G, g, x) (mit x zufaellig)
 
-Problem: Homomorphie von RSA: Neue Signaturen lassen sich aus bekannten berechnen.
+Enc(pk, M) = (g<sup>y</sup>, g<sup>xy</sup> * M) (mit y zufaellig)
+Dec(sk, (Y, Z)) = Z/Y<sup>x</sup> (= (g<sup>xy</sup> * M)/(g<sup>y</sup>)<sup>x</sup> = M)
 
-Bricht EUF-CMA-Sicherheit.
+Verschluesselung probabilistisch
+Wie RSA homomorph, aber nicht-homomorphe Varianten existieren",Sicherheit,0
+Lineare Kryptoanalyse,"Finde F<sub>2</sub>-lineare Abhaengigkeiten zwischen den Bits
 
-Loesung: RSA-PSS.",Sicherheit,0
-DES,"Data Encryption Standard
+Idealer Fall: K aus Paaren herleitbar
 
-Erinnerung: E: {0, 1}<sup>k</sup> x {0, 1}<sup>l</sup> → {0, 1}<sup>l</sup> zentral
+Bei Feistelverfahren indirekter Angriff moeglich:
+1. Finde lin. Abh. zwischen F-Ein- und -Ausgabe
+2. Erweitere Abhaengigkeiten auf die ersten n-1 Feistel-Runden
+3. Vollstaendige Suche ueber letzten Rundenschluessel K<sup>(n)</sup>...
+4. ...ueberpruefe K<sup>(n)</sup>-Kandidaten mittels linearer Abhaengigkeit
+5. Wenn K<sup>(n)</sup> gefunden, suche nach K<sup>(n-1)</sup>, danach K<sup>(n-2)</sup>",Sicherheit,0
+kleine Wahrscheinlichkeit,"Vernachlaessigbar (in k)
+f: N -&gt; R vernachlaessigbar :&lt;=&gt; |f| verschwindet asymptotisch schneller als Kehrwert jedes vorgegebenen Polynoms",Sicherheit,1
+IPsec (Internet Protocol Security),"Aehnlich wie TLS, aber ohne Handshake und auf niedriger Ebene.
+Schlecht untersucht, aber Angriffe existieren.",Sicherheit,1
+Kollisionsresistenz von Hashfunktionen,"Eine Hashfunktion H ist kollisionsresistent, wenn jeder effiziente Algorithmus nur mit kleiner Wahrscheinlichkeit eine Kollision findet.
 
-DES: Beispiel fuer E mit k = 56 und l = 64
+Formal:
+Eine ueber k parametrisierte Funktion H ist kollisionsresistent, wenn jeder PPT-Algorithmus nur mit hoechstens vernachlaessigbarer Wahrscheinlichkeit eine Kollision findet.
 
-Verwendet Feistel-Netzwerke.
-Rundenfunktion F ohne Falltuer -&gt; Falltuerfunktion E.
-Strukturell ungebrochen.",Sicherheit,0
+
+Genauer: fuer jeden PPT-Algorithmus A ist
+
+Adv<sup>cr</sup><sub>H,A</sub>(k) := Pr[(X, X') &lt;- A(1<sup>k</sup>) : X != X' und H<sub>k</sub>(X) = H<sub>k</sub>(X')]
+
+vernachlaessigbar.
+
+Kollisionsresistenz =&gt; Einwegeigenschaft",Sicherheit,1
+Hash-Then-Sign-Paradigma,"Sei (Gen, Sig, Ver) EUF-CMA-sicher und H eine kollisionsresistente Hashfunktion. Dann ist das durch 
+
+Gen'(1<sup>k</sup>) = Gen(1<sup>k</sup>)
+Sig'(sk, M) = Sig(sk, H(M))
+Ver'(pk, M, sigma) = Ver(pk, H(M), sigma)
+
+erklaerte Signatureverfahren EUF-CMA-sicher",Sicherheit,1
+RSA-PSS (Probabilistic Signature Scheme),"Sig(sk, M) = (pad(M))<sup>d</sup> mod N
+Ver(pk, M, sigma) = 1 :&lt;=&gt; sigma<sup>e</sup> mod N gueltiges pad(M)
+
+EUF-CMA-sicher, sofern RSA-Funktion schwer zu invertieren",Sicherheit,1
+Blockchiffre,"Kann nur einzelnen Block auf Chiffrat abbilden, fuer laengere Klartexte werden Betriebsmodi gebraucht (ECB, CBC, CFB, OFB)",Sicherheit,1
+Stromchiffre,Zeichen des Klartexts werden einzeln mit den Zeichen eines Schluesselstroms verknuepft,Sicherheit,1
+Hash-Then-Sign-Paradigma,"Sei (Sig, Ver) EUF-CMA-sicher und H eine kollisionsresistente Hashfunktion. Dann ist der durch Sig'(K, M) = Sig(K, H(M)), Ver'(K, M, sigma) = Ver(K, H(M), sigma) erklaerte MAC EUF-CMA-sicher",Sicherheit,1
 MAC,"Message Authentication Code:
 
 Alice und Bob besitzen gemeinsames Geheimnis K
@@ -282,5 +303,4 @@ Alice<sub>K</sub> &lt;--- (M,σ) --- Bob<sub>K</sub>
 
 Signieren: σ &lt;- Sig(K , M)
 Verifizieren: Ver(K , M, σ) in {0, 1}
-Korrektheit: Ver(K , σ) = 1 fuer alle K, M und σ &lt;- Sig(K, M)",Sicherheit,0
-Theorem (Hastad und Naeslund),"Sei N, e, d wie bei RSA, M* und i in {1, ..., log2(N)} beliebig. Sei O ein Orakel, das bei Eingabe C das i-te Bit von M = Cd mod N ausgibt. Dann existiert ein (von N, e, d unabhaengiger) Polynomial-Algorithmus, der bei Eingabe N, e, i und C* := (M*)e mod N, und mit O-Zugriff M* berechnet.",Sicherheit,0
+Korrektheit: Ver(K , σ) = 1 fuer alle K, M und σ &lt;- Sig(K, M)",Sicherheit,1
