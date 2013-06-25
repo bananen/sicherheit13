@@ -1,24 +1,4 @@
 Frontside,Flipside,Category,Level
-Rainbow Tables,"Grundidee: betrachte Ketten von Hash-Passwort-Paaren mit Hilfe von einer Funktion:
-
-(H(pw<sub>1,1</sub>),pw<sub>1,1</sub>) --f--&gt; (H(pw<sub>1,2</sub>),pw<sub>1,2</sub>) ...
-(H(pw<sub>2,1</sub>),pw<sub>2,1</sub>) --f--&gt; (H(pw<sub>2,2</sub>),pw<sub>2,2</sub>) ...
-
-Konsequenz: Nur noch die aeußeren Tupel muessen gespeichert werden, spart Faktor m/2 an Speicherplatz.
-
-
-Bei Rainbow Tables fuer jede Spalte eine Funktion, damit Restzeilen nicht gleich sind, sobald pw<sub>i,u</sub> = pw<sub>j,v</sub>.",,0
-Gegenmaßnahmen zu Woerterbuchangriffen,"Salting:
-U<sub>pw</sub> ---pw---&gt; S<sub>(salt,H(salt,pw))
-
-</sub>Key Strengthening:
-H'(pw) = H(H(...H(pw)...))",,0
-Interaktive Nutzerauthentifikation,"U nutzt sichere Hardware (Chipkarte/Lesegeraet):
-
-U ---pw/PIN---&gt; HW<sub>K,pw</sub> &lt;---R--- S<sub>K</sub>
-U                     HW<sub>K,pw</sub> ---sigma:=Sig(K,R)---&gt; S<sub>K
-
-</sub>Manchmal ohne pw/PIN.",,0
 ECB,"Electronic Codebook Mode:
 
 C<sub>i</sub> := E(K, M<sub>i</sub> )
@@ -264,6 +244,26 @@ Bei Feistelverfahren indirekter Angriff moeglich:
 3. Vollstaendige Suche ueber letzten Rundenschluessel K<sup>(n)</sup>...
 4. ...ueberpruefe K<sup>(n)</sup>-Kandidaten mittels linearer Abhaengigkeit
 5. Wenn K<sup>(n)</sup> gefunden, suche nach K<sup>(n-1)</sup>, danach K<sup>(n-2)</sup>",Sicherheit,0
+Rainbow Tables,"Grundidee: betrachte Ketten von Hash-Passwort-Paaren mit Hilfe von einer Funktion:
+
+(H(pw<sub>1,1</sub>),pw<sub>1,1</sub>) --f--&gt; (H(pw<sub>1,2</sub>),pw<sub>1,2</sub>) ...
+(H(pw<sub>2,1</sub>),pw<sub>2,1</sub>) --f--&gt; (H(pw<sub>2,2</sub>),pw<sub>2,2</sub>) ...
+
+Konsequenz: Nur noch die aeußeren Tupel muessen gespeichert werden, spart Faktor m/2 an Speicherplatz.
+
+
+Bei Rainbow Tables fuer jede Spalte eine Funktion, damit Restzeilen nicht gleich sind, sobald pw<sub>i,u</sub> = pw<sub>j,v</sub>.",Sicherheit,0
+Gegenmaßnahmen zu Woerterbuchangriffen,"Salting:
+U<sub>pw</sub> ---pw---&gt; S<sub>(salt,H(salt,pw))
+
+</sub>Key Strengthening:
+H'(pw) = H(H(...H(pw)...))",Sicherheit,0
+Interaktive Nutzerauthentifikation,"U nutzt sichere Hardware (Chipkarte/Lesegeraet):
+
+U ---pw/PIN---&gt; HW<sub>K,pw</sub> &lt;---R--- S<sub>K</sub>
+U                     HW<sub>K,pw</sub> ---sigma:=Sig(K,R)---&gt; S<sub>K
+
+</sub>Manchmal ohne pw/PIN.",Sicherheit,0
 kleine Wahrscheinlichkeit,"Vernachlaessigbar (in k)
 f: N -&gt; R vernachlaessigbar :&lt;=&gt; |f| verschwindet asymptotisch schneller als Kehrwert jedes vorgegebenen Polynoms",Sicherheit,1
 IPsec (Internet Protocol Security),"Aehnlich wie TLS, aber ohne Handshake und auf niedriger Ebene.
